@@ -21,11 +21,12 @@ logger = logging.getLogger(__name__)
 # Suppress the FP16 warning
 warnings.filterwarnings("ignore", message="FP16 is not supported on CPU")
 
-RECORDINGS_DIR = r"C:/Courses/Sem 6/Selected Topics In Ai/Selected proj/llm-chatbot-app/recordings"
-os.makedirs(RECORDINGS_DIR, exist_ok=True)
+# Remove the hardcoded recordings directory
+# RECORDINGS_DIR = r"C:/Courses/Sem 6/Selected Topics In Ai/Selected proj/llm-chatbot-app/recordings"
+# os.makedirs(RECORDINGS_DIR, exist_ok=True)
 
 class SpeechToText:
-    def __init__(self):
+    def __init__(self, recordings_dir):
         logger.info("Initializing SpeechToText...")
         try:
             # Initialize Whisper model with CPU-optimized settings
@@ -40,6 +41,7 @@ class SpeechToText:
         self.recording = False
         self.audio_queue = queue.Queue()
         self.recording_thread = None
+        self.recordings_dir = recordings_dir
         
     def record_audio(self):
         """Record audio until user presses Enter"""
@@ -141,9 +143,9 @@ class SpeechToText:
                 logger.error("Failed to save audio recording")
                 return "Error saving audio recording."
 
-            # Save a copy of the recording in the hard-coded directory
+            # Save a copy of the recording in the provided recordings directory
             timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-            recording_path = os.path.join(RECORDINGS_DIR, f"recording_{timestamp}.wav")
+            recording_path = os.path.join(self.recordings_dir, f"recording_{timestamp}.wav")
             shutil.copy(temp_filename, recording_path)
             logger.info(f"Saved a copy of the recording at: {recording_path}")
 

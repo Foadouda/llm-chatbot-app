@@ -45,7 +45,7 @@ def play_mp3_file(filepath):
         except Exception as e:
             print(f"⚠️ Could not delete temporary MP3 file: {str(e)}")
 
-def speak_with_elevenlabs(text):
+def speak_with_elevenlabs(text, recordings_dir):
     print("🔊 Speaking with ElevenLabs...")
     try:
         url = f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}"
@@ -67,8 +67,8 @@ def speak_with_elevenlabs(text):
         if response.status_code == 200:
             print("Audio received, saving to file...")
             
-            # Save to a unique temporary file
-            temp_file = f"C:\\Courses\\Sem 7\\NLP\\Assignments\\project_rag_quantum\\temp_response_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')}.mp3"
+            # Save to a unique temporary file within the recordings directory
+            temp_file = os.path.join(recordings_dir, f"temp_response_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f')}.mp3")
             with open(temp_file, "wb") as audio_file:
                 audio_file.write(response.content)
             

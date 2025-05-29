@@ -136,7 +136,26 @@ class RAG:
     async def model(self, pdf_docs, user_question):
         return await self.main([pdf_docs], user_question)
 
-    def summarize(self, text):
-        # Implement summarization logic using the LLM model
-        # This is a placeholder implementation
-        return "Summary of the text."
+    async def summarize(self, text):
+        """Generate a summary of the given text using the LLM."""
+        try:
+            # Use a simple prompt for summarization
+            summarization_prompt = PromptTemplate(
+                template="Summarize the following text:\n\n{text}\n\nSUMMARY:",
+                input_variables=["text"],
+            )
+            
+            # Use the configured Google Gemini model
+            model = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0.5)
+            
+            # Create a simple chain for summarization
+            chain = summarization_prompt | model
+            
+            # Run the summarization chain in a separate thread
+            response = await asyncio.to_thread(chain.invoke, {"text": text})
+            
+            return response.content.strip()
+        except Exception as e:
+            # Log the error and return an informative message
+            print(f"Error during summarization: {e}") # Consider using logger here
+            return "An error occurred while generating the summary."

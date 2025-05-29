@@ -7,9 +7,9 @@ def load_pdf(file_path):
         text += page.extract_text() + "\n"
     return text.strip()
 
-def summarize_pdf(text, model):
+async def summarize_pdf(text, model):
     # Use the RAG model to summarize the text
-    summary = model.summarize(text)
+    summary = await model.summarize(text)
     return summary
 
 def extract_text_from_pdf(file_path):

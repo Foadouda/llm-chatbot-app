@@ -63,13 +63,13 @@ class Chatbot:
             text = self.pdf_handler["extract_text_from_pdf"](uploaded_file)
             chunks = self.rag.get_text_chunks(text)
             self.rag.get_vector_store(chunks)  # Create the FAISS index
-            summary = self.pdf_handler["summarize_pdf"](text, self.rag)  # Pass the RAG model
+            summary = asyncio.run(self.pdf_handler["summarize_pdf"](text, self.rag))
             return summary
         elif uploaded_file.type == "text/csv":
             data = self.csv_handler["read_csv"](uploaded_file)
             chunks = self.rag.get_text_chunks(data.to_string())
             self.rag.get_vector_store(chunks)  # Create the FAISS index
-            summary = self.csv_handler["summarize_csv"](data)
+            summary = asyncio.run(self.csv_handler["summarize_csv"](data, self.rag))
             return summary
         else:
             return "Unsupported file format."

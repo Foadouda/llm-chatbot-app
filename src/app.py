@@ -13,7 +13,13 @@ import os
 import shutil
 import datetime
 import re
-import time # Import time module
+import time 
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+sys.path.append(os.path.join(current_dir,"utils"))
+from helpers import clean_for_tts 
+
 
 #from utils.helpers import clean_for_tts
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
@@ -21,18 +27,12 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-def clean_for_tts(text):
-    # Remove markdown bullet points, asterisks, and extra whitespace
-    text = re.sub(r'[\*•]+', '', text)  # Remove asterisks and bullet points
-    text = re.sub(r'\n+', '. ', text)  # Replace newlines with a period and space
-    text = re.sub(r'\s+', ' ', text)   # Collapse multiple spaces
-    text = re.sub(r'\*\*([^*]+)\*\*', r'\1', text)  # Remove bold markdown
-    text = re.sub(r'\*([^*]+)\*', r'\1', text)        # Remove italic markdown
-    return text.strip()
-# Add the root directory of your project to the Python path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
-RECORDINGS_DIR = r"C:/Courses/Sem 6/Selected Topics In Ai/Selected proj/llm-chatbot-app/recordings"
+# Calculate project root and recordings directory dynamically
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+RECORDINGS_DIR = os.path.join(PROJECT_ROOT, 'recordings')
+
+# Create the recordings directory if it doesn't exist
 os.makedirs(RECORDINGS_DIR, exist_ok=True)
 
 def main():
@@ -42,7 +42,7 @@ def main():
     # Initialize STT
     if 'stt' not in st.session_state:
         try:
-            st.session_state.stt = SpeechToText()
+            st.session_state.stt = SpeechToText(RECORDINGS_DIR)
             logger.info("STT initialized successfully")
         except Exception as e:
             logger.error(f"Error initializing STT: {str(e)}")
@@ -125,7 +125,7 @@ def main():
             response = chatbot.get_response(user_input)
             st.session_state.conversation.append({"user": user_input, "bot": response})
             cleaned_response = clean_for_tts(response)
-            speak_with_elevenlabs(cleaned_response)
+            speak_with_elevenlabs(cleaned_response, RECORDINGS_DIR)
             # Clear the text input field after sending
             st.session_state.last_voice_input = "" # Clear the session state variable used for text_input
             st.rerun() # Trigger a rerun to clear the input box and show new conversation
@@ -149,8 +149,8 @@ def main():
     if uploaded_file is not None:
         try:
             document_summary = chatbot.process_document(uploaded_file)
-            #st.write("Document Summary:")
-            #st.write(document_summary)
+            st.write("Document Summary:")
+            st.write(document_summary)
         except Exception as e:
             logger.error(f"Error processing document: {str(e)}")
             st.error("An error occurred while processing the document. Please try again.")
