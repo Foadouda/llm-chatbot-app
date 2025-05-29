@@ -1,0 +1,32 @@
+# Byte-code files
+*.pyc
+*.pyo
+
+# IDE specific files
+.vscode/
+.idea/
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Dependencies
+__pycache__/
+
+# Generated files
+faiss_index/
+recordings/
+selected-topics-446218-49cb18cfd027.json
+quantum_knowledge_Fouad Ouda_212001157.csv
+
+# Sensitive information (API keys)
+.env
+*.env
+
+# Streamlit specific ignores
+.streamlit/
+
+# Operating System files
+.DS_Store
+thumbs.db 
