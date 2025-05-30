@@ -3,7 +3,6 @@ from chatbot.chatbot import Chatbot
 from chatbot.memory import Memory
 from chatbot.pdf_handler import extract_text_from_pdf, summarize_pdf
 from chatbot.csv_handler import read_csv, summarize_csv
-from chatbot.arxiv_handler import ArxivHandler
 from chatbot.TTS import speak_with_elevenlabs
 from chatbot.STT import SpeechToText
 import sys
@@ -62,14 +61,13 @@ def main():
         "read_csv": read_csv,
         "summarize_csv": summarize_csv
     }
-    arxiv_handler = ArxivHandler()
-    chatbot = Chatbot(memory, pdf_handler, csv_handler, arxiv_handler)
+    chatbot = Chatbot(memory, pdf_handler, csv_handler)
 
     if 'conversation' not in st.session_state:
         st.session_state.conversation = []
 
-    # Create two columns for text input and voice input
-    col1, col2 = st.columns([4, 1])
+    # Create a single column layout for text input and voice input
+    col1 = st.container()
     
     # Initialize last_voice_input in session state if it doesn't exist
     if 'last_voice_input' not in st.session_state:
@@ -81,7 +79,7 @@ def main():
         # Reset last_voice_input after using it to populate the text_input
         st.session_state.last_voice_input = ""
 
-    with col2:
+        # Place the voice input button below the text input within the same column
         if st.button("🎤 Voice Input"):
             # Set the recording state and trigger a rerun to show the spinner
             st.session_state.is_recording = True

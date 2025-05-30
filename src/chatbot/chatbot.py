@@ -3,11 +3,10 @@ import asyncio
 import re
 
 class Chatbot:
-    def __init__(self, memory, pdf_handler, csv_handler, arxiv_handler):
+    def __init__(self, memory, pdf_handler, csv_handler):
         self.memory = memory
         self.pdf_handler = pdf_handler
         self.csv_handler = csv_handler
-        self.arxiv_handler = arxiv_handler
         self.rag = RAG()  # Initialize the RAG class
 
     def process_input(self, user_input):

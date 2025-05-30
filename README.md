@@ -1,6 +1,8 @@
 # LLM-Powered Chatbot Application
 
-This project is a Streamlit application that leverages a large language model (LLM) powered by **Google Gemini (specifically the gemini-2.0-flash model)** to create an interactive chatbot. The chatbot supports question-answering and summarization of various document types, including PDF, CSV, and arXiv documents. It also features memory functionality to retain context during conversations, displays the entire conversation history, and includes **voice input** capability.
+This project is a Streamlit application that leverages a large language model (LLM) powered by **Google Gemini (specifically the gemini-2.0-flash model)** to create an interactive chatbot. The chatbot supports question-answering and summarization of various document types, including PDF and CSV documents. It also features memory functionality to retain context during conversations, displays the entire conversation history, and includes **voice input** capability.
+
+![Screenshot of the LLM-Powered Chatbot](images/image.png)
 
 ## Features
 
@@ -8,29 +10,34 @@ This project is a Streamlit application that leverages a large language model (L
 - **Summarization**: Get summaries of uploaded documents.
 - **Memory Functionality**: Chatbot remembers previous interactions.
 - **Conversation History**: View the full conversation log.
-- **Voice Input**: Interact with the chatbot using your voice (powered by Eleven Labs for Text-to-Speech).
+- **Text Input**: Interact with the chatbot by typing your messages.
+- **Voice Input**: Enables spoken interaction with the chatbot.
+    - Speech-to-Text (STT): Powered by Whisper.
+    - Text-to-Speech (TTS): Powered by Eleven Labs.
 - **Google Gemini Integration**: Utilizes the `gemini-2.0-flash` model for LLM capabilities.
 
 ## Project Structure
 
 ```
-llm-chatbot-app
-├── src
-│   ├── app.py                # Main entry point for the Streamlit application
-│   ├── chatbot
-│   │   ├── __init__.py       # Initializes the chatbot package
-│   │   ├── memory.py         # Implements memory functionality
-│   │   ├── pdf_handler.py     # Handles PDF document processing
-│   │   ├── csv_handler.py     # Handles CSV file processing
-│   │   ├── arxiv_handler.py   # Manages arXiv document handling
-│   │   └── chatbot.py         # Main chatbot class and logic
-│   ├── utils
-│   │   ├── __init__.py       # Initializes the utils package
-│   │   └── helpers.py        # Utility functions for the application
-│   └── types
-│       └── index.py          # Defines custom types and interfaces
-├── requirements.txt           # Lists project dependencies
-└── README.md                  # Project documentation
+llm-chatbot-app/
+├── .git/                 # Git repository (hidden)
+├── .gitignore            # Specifies intentionally untracked files
+├── faiss_index/          # Directory for FAISS index
+├── recordings/           # Directory for audio recordings and temporary files
+├── README.md             # Project documentation
+├── requirements.txt      # Project dependencies
+└── src/
+    ├── app.py          # Main Streamlit application file
+    ├── chatbot/
+    │   ├── chatbot.py      # Main chatbot logic
+    │   ├── csv_handler.py    # Handles CSV file processing
+    │   ├── memory.py         # Implements conversation memory
+    │   ├── pdf_handler.py    # Handles PDF document processing
+    │   ├── RAG.py            # Retrieval Augmented Generation logic (using Gemini)
+    │   ├── STT.py            # Speech-to-Text functionality (using Whisper)
+    │   └── TTS.py            # Text-to-Speech functionality (using Eleven Labs)
+    └── utils/
+        └── helpers.py      # Utility functions
 ```
 
 ## Installation
