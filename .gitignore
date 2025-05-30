@@ -30,3 +30,5 @@ quantum_knowledge_Fouad Ouda_212001157.csv
 # Operating System files
 .DS_Store
 thumbs.db 
+
+*.mp4
